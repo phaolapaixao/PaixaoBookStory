@@ -1,0 +1,16 @@
+body {
+    background-color: #f9fafb;
+    font-family: 'Segoe UI', sans-serif;
+}
+h2 {
+    color: #4f46e5;
+    font-weight: bold;
+}
+table {
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+}
+button {
+    font-weight: 600;
+}

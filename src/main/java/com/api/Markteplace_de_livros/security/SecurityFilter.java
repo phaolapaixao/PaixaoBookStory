@@ -16,10 +16,10 @@ import java.io.IOException;
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
-    private final CustomVendedorDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
     private final JwtTokenService jwtTokenService;
 
-    public SecurityFilter(CustomVendedorDetailsService userDetailsService, JwtTokenService jwtTokenService) {
+    public SecurityFilter(CustomUserDetailsService userDetailsService, JwtTokenService jwtTokenService) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenService = jwtTokenService;
     }

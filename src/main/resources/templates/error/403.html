@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Acesso Negado</title>
+    <style>
+        body {
+            background-image: url('/img/comprarLivros.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            position: relative;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* ajuste a transparência */
+            z-index: -1;
+        }
+
+        h1, p {
+            text-align: center;
+            margin-top: 20vh;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body>
+<h1>403 - Acesso Negado</h1>
+<p>Você não tem permissão para acessar esta página.</p>
+</body>
+</html>

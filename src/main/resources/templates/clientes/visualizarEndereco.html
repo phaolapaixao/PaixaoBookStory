@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Visualizar Endereço</title>
+</head>
+<body>
+<h2>Endereço de <span th:text="${cliente.nome}">Cliente</span></h2>
+
+<p><strong>Estado:</strong> <span th:text="${endereco.estado}"></span></p>
+<p><strong>Cidade:</strong> <span th:text="${endereco.cidade}"></span></p>
+<p><strong>CEP:</strong> <span th:text="${endereco.cep}"></span></p>
+<p><strong>Rua:</strong> <span th:text="${endereco.rua}"></span></p>
+<p><strong>Número:</strong> <span th:text="${endereco.numero}"></span></p>
+
+<a th:href="@{/clientes/enderecos/{id}(id=${cliente.id})}">Editar endereço</a>
+<a href="/clientes/index">Voltar</a>
+</body>
+</html>

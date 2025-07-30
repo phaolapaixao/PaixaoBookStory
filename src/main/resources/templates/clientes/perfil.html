@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil do Usuário</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/clientes/perfil.css">
+    <script src="/js/clientes/perfil.js" defer></script>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card perfil-card shadow-lg p-4 mx-auto">
+        <h2 class="text-center mb-4">
+            Perfil de <span class="text-primary fw-bold" th:text="${cliente.nome}">Usuário</span>
+        </h2>
+
+        <form id="formEditar" th:action="@{/clientes/perfil/editar}" method="post" class="mb-3">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Nome:</label>
+                <input type="text" class="form-control" name="nome" th:value="${cliente.nome}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Email:</label>
+                <input type="email" class="form-control" name="email" th:value="${cliente.email}" required>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Salvar Alterações</button>
+        </form>
+
+        <form id="formApagar" th:action="@{/clientes/perfil/apagar}" method="post">
+            <button type="submit" class="btn btn-danger w-100">Apagar Conta</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a th:href="@{/clientes/index}" class="btn btn-secondary">Voltar para a Loja</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

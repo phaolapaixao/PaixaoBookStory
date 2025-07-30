@@ -1,6 +1,7 @@
 package com.api.Markteplace_de_livros.service;
 
 import com.api.Markteplace_de_livros.dto.LivroClienteDTO;
+import com.api.Markteplace_de_livros.dto.LivroVendedorDTO;
 import com.api.Markteplace_de_livros.model.*;
 import com.api.Markteplace_de_livros.repository.AutorRepository;
 import com.api.Markteplace_de_livros.repository.LivroRepository;
@@ -144,4 +145,22 @@ public class LivroService {
                 .map(this::converterParaDTO)
                 .collect(Collectors.toList());
     }
+    public List<Livro> pesquisar(String termoBusca) {
+        if (termoBusca == null || termoBusca.trim().isEmpty()) {
+            return livroRepository.findAll();
+        }
+        return livroRepository.pesquisarLivros(termoBusca);
+    }
+
+    public List<Livro> listarPorCategoria(Integer categoriaId) {
+        return livroRepository.findByCategoriaId(categoriaId);
+    }
+
+    public List<LivroClienteDTO> buscarPorCategoria(Integer categoriaId) {
+        List<Livro> livros = livroRepository.findByCategoriaId(categoriaId);
+        return livros.stream()
+                .map(this::converterParaDTO)
+                .toList();
+    }
+
 }

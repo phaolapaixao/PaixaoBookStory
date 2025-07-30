@@ -1,12 +1,13 @@
 package com.api.Markteplace_de_livros.config;
 
-import com.api.Markteplace_de_livros.security.CustomClienteDetailsService;
-import com.api.Markteplace_de_livros.security.CustomVendedorDetailsService;
+import com.api.Markteplace_de_livros.security.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,13 +20,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final CustomVendedorDetailsService vendedorDetailsService;
-    private final CustomClienteDetailsService clienteDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public SecurityConfig(CustomVendedorDetailsService vendedorDetailsService,
-                          CustomClienteDetailsService clienteDetailsService) {
-        this.vendedorDetailsService = vendedorDetailsService;
-        this.clienteDetailsService = clienteDetailsService;
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Bean
@@ -34,26 +32,25 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
-        auth.userDetailsService(vendedorDetailsService).passwordEncoder(passwordEncoder());
-        auth.userDetailsService(clienteDetailsService).passwordEncoder(passwordEncoder());
-        return auth.build();
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(customUserDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
     @Order(1)
     public SecurityFilterChain vendedorSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/vendedores/**")
+                .securityMatcher("/vendedores/**", "/livros/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/vendedores/login",
-                                "/vendedores/registro",
-                                "/vendedores/cadastrar",
-                                "/vendedores/index",
-                                "/vendedor/**"  // Permite acesso aos repositórios
-                        ).permitAll()
+                        .requestMatchers("/vendedores/login", "/vendedores/registro").permitAll()
                         .anyRequest().hasRole("VENDEDOR")
                 )
                 .formLogin(form -> form
@@ -82,7 +79,12 @@ public class SecurityConfig {
         return http
                 .securityMatcher("/clientes/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/clientes/login", "/clientes/registro", "/clientes/index").permitAll()
+                        .requestMatchers("/clientes/login",
+                                "/clientes/registro",
+                                "/clientes/index",
+                                "/clientes/pesquisar",
+                                "/clientes/livros/filtros",
+                                "/clientes/livros/categoria/**").permitAll()
                         .anyRequest().hasRole("CLIENTE")
                 )
                 .formLogin(form -> form
@@ -110,16 +112,7 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/static/**",
-                                "/css/**",
-                                "/js/**",
-                                "/img/**",
-                                "/webjars/**",
-                                "/errorr",
-                                "/vendedor/**"  // Permite acesso aos repositórios
-                        ).permitAll()
+                        .requestMatchers("/", "/static/**", "/css/**", "/js/**", "/img/**", "/webjars/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())

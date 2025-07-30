@@ -38,14 +38,12 @@ public class VendedorLivroService {
 
         VendedorLivro vl;
         if (optionalVL.isPresent()) {
-            // Atualiza o existente
             vl = optionalVL.get();
             vl.setCondicao(condicao);
             vl.setFormato(formato);
             vl.setPreco(preco);
             vl.setIdioma(idioma);
         } else {
-            // Cria novo vínculo
             vl = new VendedorLivro();
             vl.setLivro(livro);
             vl.setVendedor(vendedor);

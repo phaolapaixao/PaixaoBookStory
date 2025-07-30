@@ -17,14 +17,10 @@ public class ClienteAuthService {
     }
 
     public Cliente autenticar(String email, String senhaDigitada) {
-        System.out.println("Tentando autenticar cliente: " + email);
-
         Cliente cliente = clienteService.buscarPorEmail(email)
                 .orElseThrow(() -> new RuntimeException("E-mail não encontrado"));
 
         boolean senhaCorreta = passwordEncoder.matches(senhaDigitada, cliente.getSenha());
-        System.out.println("Senha correta? " + senhaCorreta);
-
         if (!senhaCorreta) {
             throw new RuntimeException("Senha inválida");
         }

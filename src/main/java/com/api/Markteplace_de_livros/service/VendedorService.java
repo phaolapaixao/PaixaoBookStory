@@ -30,7 +30,6 @@ public class VendedorService {
                 .orElseThrow(() -> new RuntimeException("Vendedor não encontrado com o email: " + email));
     }
 
-
     public Vendedor salvarVendedor(Vendedor vendedor) {
         if (existsByEmail(vendedor.getEmail())) {
             throw new RuntimeException("Email já está em uso");

@@ -33,11 +33,10 @@ public class VendedorController {
     @GetMapping("/index")
     public String paginaInicialVendedor(Model model, Principal principal) {
         String email = principal.getName();
-
-        Vendedor vendedor = vendedoresService.findByEmail(email);
-        model.addAttribute("vendedor", vendedor);
-
-        return "vendedores/index";
+        Vendedor vendedorLogado = vendedoresService.findByEmail(email);
+        model.addAttribute("vendedor", vendedorLogado);
+        model.addAttribute("vendedor_a", vendedorLogado.getNome_fantasia());
+        return "vendedores/index"; // template Thymeleaf
     }
 
     @PostMapping("/cadastrar")

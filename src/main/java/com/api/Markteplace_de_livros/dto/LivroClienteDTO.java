@@ -88,12 +88,19 @@ public class LivroClienteDTO {
     }
 
     public static class VendedorLivroDTO {
+        private Integer id;
         private String nomeFantasia;
         private Double preco;
         private String idioma;
         private String formato;
         private String condicao;
 
+        public Integer getId() {
+            return id;
+        }
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
         public Double getPreco() {
             return preco;

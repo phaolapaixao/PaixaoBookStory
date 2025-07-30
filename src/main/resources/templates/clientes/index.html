@@ -7,47 +7,93 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-
-    <style>
-        body { background-color: #f4f6f9; font-family: 'Segoe UI', sans-serif; }
-        .header { background-color: #343a40; color: white; padding: 30px 0; border-radius: 0 0 10px 10px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .btn-buy { background-color: #ff6f61; color: white; font-weight: 600; border: none; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s ease; width: 100%; }
-        .btn-buy:hover { background-color: #e85b50; color: white; }
-        .card { border: none; border-radius: 12px; overflow: hidden; box-shadow: 0 0 15px rgba(0,0,0,0.08); transition: transform 0.2s; display: flex; flex-direction: column; }
-        .card:hover { transform: scale(1.03); }
-        .card-header { background-color: #6c757d; color: white; font-size: 1.25rem; font-weight: bold; padding: 15px; text-align: center; }
-        .badge-category, .badge-author { margin: 2px; }
-        .price { font-size: 1.3rem; font-weight: 700; color: #ff3e3e; margin-bottom: 10px; text-align: center; }
-        .vendedor-box { background-color: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 10px; border-left: 4px solid #0d6efd; font-size: 0.9rem; }
-        .card-footer { padding: 10px 15px; background-color: #f1f1f1; border-top: 1px solid #dee2e6; display: flex; justify-content: center; align-items: center; }
-        .empty-list { background: white; padding: 60px 30px; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
-        #cart { position: fixed; top: 10px; right: 10px; background: #ff6f61; color: white; padding: 10px 20px; border-radius: 30px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1000; }
-        #cart:hover { background: #e85b50; }
-    </style>
+    <link href="/css/clientes/index.css" rel="stylesheet" />
 </head>
 <body>
 
+<!-- Sidebar -->
+<div class="sidebar">
+    <h4>Menu</h4>
+    <a th:href="@{/clientes/perfil}"><i class="fas fa-user"></i> Meu Perfil</a>
+    <a th:href="@{/clientes/enderecos/{id}(id=${cliente.id})}" th:if="${cliente != null}"><i class="fas fa-map-marker-alt"></i> Endereço</a>
+    <a href="/clientes/logout" th:if="${cliente != null}">
+        <i class="fas fa-sign-out-alt"></i> Sair
+    </a>
+
+</div>
+
 <div class="header text-center">
-    <h2><i class="fas fa-book me-2"></i>PaixãoBookstore - Compre Agora</h2>
+    <h2>
+        <a th:href="@{/clientes/index}">
+            <i class="fas fa-book me-2"></i> PaixãoBookstore
+        </a>
+    </h2>
 
-    <div class="mt-2">
-        <span th:if="${cliente != null}">
-            👋 Bem-vindo, <strong th:text="${cliente.nome}">Usuário</strong>!
-            <a href="/clientes/logout" class="btn btn-danger btn-sm ms-2">
-                <i class="fas fa-sign-out-alt"></i> Sair
-            </a>
-        </span>
+    <form th:action="@{/clientes/pesquisar}" method="get" class="d-flex justify-content-center mt-3">
+        <input type="text" name="q" class="form-control w-50 me-2" placeholder="Pesquisar livros..." required>
+        <button type="submit" class="btn btn-light fw-bold">
+            <i class="fas fa-search"></i> Buscar
+        </button>
+    </form>
 
-        <a th:if="${cliente == null}" href="/clientes/login" class="btn btn-light btn-sm">
+    <div class="mt-3" th:if="${cliente == null}">
+        <a href="/clientes/login" class="btn btn-light btn-sm fw-bold">
             <i class="fas fa-user"></i> Entrar
         </a>
     </div>
 </div>
 
-<div id="cart" onclick="alert('Carrinho com ' + cartCount + ' item(s)')">
+<!-- Carrinho -->
+<div id="cart" onclick="window.location.href='/clientes/carrinho'">
     <i class="fas fa-shopping-cart"></i> Carrinho (<span id="cart-count">0</span>)
 </div>
 
+<!-- Categorias -->
+<div class="categorias">
+    <div th:each="categoria : ${categorias}">
+        <a th:href="@{/clientes/livros/categoria/{id}(id=${categoria.id})}" th:text="${categoria.nome}"></a>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center mb-4">
+    <form th:action="@{/clientes/index}" method="get" class="row g-3" style="max-width: 900px; width: 100%;">
+        <div class="col-md-3">
+            <select name="idioma" class="form-select">
+                <option value="">Todos os Idiomas</option>
+                <option value="Inglês">Inglês</option>
+                <option value="Espanhol">Espanhol</option>
+                <option value="Francês">Francês</option>
+                <option value="Russo">Russo</option>
+                <option value="Português">Português</option>
+                <option th:each="i : ${idiomas}" th:value="${i}" th:text="${i}"></option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="formato" class="form-select">
+                <option value="">Todos os Formatos</option>
+                <option value="Físico">Físico</option>
+                <option value="Ebook">Ebook</option>
+                <option value="Digital">Digital</option>
+                <option th:each="f : ${formatos}" th:value="${f}" th:text="${f}"></option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="preco" class="form-select">
+                <option value="">Ordenar por Preço</option>
+                <option value="asc">Mais Barato</option>
+                <option value="desc">Mais Caro</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 d-grid">
+            <button type="submit" class="btn btn-primary fw-bold">Filtrar</button>
+        </div>
+    </form>
+</div>
+
+<!-- Lista de Livros -->
 <div class="container">
     <div class="row" th:unless="${#lists.isEmpty(livros)}">
         <div class="col-lg-4 col-md-6 mb-4" th:each="livro : ${livros}">
@@ -55,42 +101,41 @@
                 <div class="card-header" th:text="${livro.titulo}">Título do Livro</div>
                 <div class="card-body d-flex flex-column">
                     <div class="text-center mb-3" th:if="${livro.img != null}">
-                        <img th:src="${livro.img}" alt="Capa do livro" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;" />
+                        <img th:src="${livro.img}" alt="Capa" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;" />
                     </div>
 
-                    <p class="mb-1 text-center">
+                    <p class="mb-1 text-center small">
                         <strong>ISBN:</strong> <span th:text="${livro.isbn}"></span><br />
                         <strong>Ano:</strong> <span th:text="${livro.anoPublicacao}"></span><br />
                         <strong>Editora:</strong> <span th:text="${livro.nomeEditora}">-</span>
                     </p>
 
-                    <div th:if="${!#lists.isEmpty(livro.categorias)}" class="mb-2">
-                        <strong>Categorias:</strong>
-                        <span class="badge bg-secondary" th:each="c : ${livro.categorias}" th:text="${c}"></span>
+                    <div th:if="${!#lists.isEmpty(livro.categorias)}" class="mb-2 text-center">
+                        <strong>Categorias:</strong><br>
+                        <span class="badge bg-secondary me-1" th:each="c : ${livro.categorias}" th:text="${c}"></span>
                     </div>
 
-                    <div th:if="${!#lists.isEmpty(livro.autores)}" class="mb-3">
-                        <strong>Autores:</strong>
-                        <span class="badge bg-info text-dark" th:each="a : ${livro.autores}" th:text="${a}"></span>
+                    <div th:if="${!#lists.isEmpty(livro.autores)}" class="mb-3 text-center">
+                        <strong>Autores:</strong><br>
+                        <span class="badge bg-info text-dark me-1" th:each="a : ${livro.autores}" th:text="${a}"></span>
                     </div>
 
                     <div th:if="${!#lists.isEmpty(livro.vendedores)}">
-                        <div class="section-title mb-2">Informações do Vendedor</div>
                         <div class="vendedor-box" th:each="v : ${livro.vendedores}">
-                            <p>
+                            <p class="mb-1">
                                 <strong>Preço:</strong>
                                 <span th:if="${v.preco != null}" class="price" th:text="'R$ ' + ${#numbers.formatDecimal(v.preco, 2, 'COMMA', 2, 'POINT')}"></span>
                                 <span th:if="${v.preco == null}">Não informado</span><br />
                                 <strong>Vendedor:</strong> <span th:text="${v.nomeFantasia}"></span><br />
-                                <strong>Idioma:</strong> <span th:text="${v.idioma}">-</span><br />
                                 <strong>Formato:</strong> <span th:text="${v.formato}">-</span><br />
-                                <strong>Condição:</strong> <span th:text="${v.condicao}">-</span><br />
+                                <strong>Condição:</strong> <span th:text="${v.condicao}">-</span>
+                                <strong>Idioma:</strong> <span th:text="${v.idioma}">-</span>
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="card-footer">
+                <div class="card-footer bg-white border-0">
                     <th:block th:if="${!#lists.isEmpty(livro.vendedores)}">
                         <button class="btn-buy"
                                 th:each="v, iter : ${livro.vendedores}"
@@ -100,7 +145,6 @@
                             <i class="fas fa-cart-plus me-1"></i> Comprar
                         </button>
                     </th:block>
-
                     <button class="btn btn-secondary w-100" th:if="${#lists.isEmpty(livro.vendedores)}" disabled>
                         <i class="fas fa-ban me-1"></i> Indisponível
                     </button>
@@ -111,25 +155,11 @@
 
     <div th:if="${#lists.isEmpty(livros)}" class="empty-list">
         <i class="fas fa-book-open fa-3x mb-3 text-muted"></i>
-        <h4>Nenhum livro cadastrado</h4>
-        <p>Clique em <strong>“Novo Livro”</strong> para adicionar seu primeiro item.</p>
+        <h4>Infelizmente não temos esse livro</h4>
     </div>
 </div>
 
-<script>
-    let cartCount = 0;
-    function addToCart(button) {
-        const title = button.getAttribute('data-title');
-        const price = button.getAttribute('data-price');
-        if (!price || price === 'null') {
-            alert('Preço não informado para este livro.');
-            return;
-        }
-        cartCount++;
-        document.getElementById('cart-count').textContent = cartCount;
-        alert(`Livro "${title}" adicionado ao carrinho!`);
-    }
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/clientes/index.js"></script>
 </body>
 </html>

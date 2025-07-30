@@ -22,7 +22,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Vendedor vendedor = vendedorRepository.findByEmail(email).orElse(null);
+        if (vendedor != null) {
+            return new VendedorDetailsImpl(vendedor);
+        }
 
+        // Se não for vendedor, tenta cliente
         Cliente cliente = clienteRepository.findByEmail(email).orElse(null);
         if (cliente != null) {
             return User.builder()
@@ -32,15 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     .build();
         }
 
-        Vendedor vendedor = vendedorRepository.findByEmail(email).orElse(null);
-        if (vendedor != null) {
-            return User.builder()
-                    .username(vendedor.getEmail())
-                    .password(vendedor.getSenha())
-                    .roles("VENDEDOR")
-                    .build();
-        }
-
+        // Nenhum usuário encontrado
         throw new UsernameNotFoundException("Usuário não encontrado: " + email);
     }
 }

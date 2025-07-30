@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Livros da categoria: ' + ${categoria.nome}">Livros por Categoria</title>
+</head>
+<body>
+<h1 th:text="'Livros da categoria: ' + ${categoria.nome}">Livros por Categoria</h1>
+
+<div>
+    <ul>
+        <li th:each="livro : ${livros}" th:text="${livro.titulo}">Título do Livro</li>
+    </ul>
+
+    <div th:if="${#lists.isEmpty(livros)}">
+        Nenhum livro encontrado para essa categoria.
+    </div>
+</div>
+
+<a th:href="@{/clientes/index}">Voltar</a>
+</body>
+</html>

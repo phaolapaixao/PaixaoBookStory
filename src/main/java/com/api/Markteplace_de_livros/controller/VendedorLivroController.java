@@ -1,6 +1,6 @@
 package com.api.Markteplace_de_livros.controller;
 
-import com.api.Markteplace_de_livros.dto.VendedorLivroDTO;
+import com.api.Markteplace_de_livros.dto.LivroVendedorDTO;
 import com.api.Markteplace_de_livros.model.VendedorLivro;
 import com.api.Markteplace_de_livros.service.VendedorLivroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class VendedorLivroController {
     private VendedorLivroService vendedorLivroService;
 
     @PostMapping
-    public ResponseEntity<?> criarVinculo(@RequestBody VendedorLivroDTO dto) {
+    public ResponseEntity<?> criarVinculo(@RequestBody LivroVendedorDTO dto) {
         try {
             VendedorLivro novoVinculo = vendedorLivroService.salvarVendedorLivro(
                     dto.getLivro().getId(),

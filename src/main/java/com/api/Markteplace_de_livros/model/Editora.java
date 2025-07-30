@@ -14,6 +14,10 @@ public class Editora {
 
     private String nome;
 
+    private String telefone;
+
+    private String email;
+
     @OneToMany(mappedBy = "editora")
     private Set<Livro> livros = new HashSet<>();
 
@@ -39,5 +43,21 @@ public class Editora {
 
     public void setLivros(Set<Livro> livros) {
         this.livros = livros;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

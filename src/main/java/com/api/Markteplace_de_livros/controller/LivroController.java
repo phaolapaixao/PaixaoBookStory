@@ -145,7 +145,7 @@ public class LivroController {
         Vendedor vendedor = getVendedorLogado();
         List<Livro> livros = livroService.findLivrosByVendedor(vendedor);
         model.addAttribute("livros", livros);
-        return "livros/lista";
+        return "livros/cards";
     }
 
     @GetMapping("/editar/{id}")
