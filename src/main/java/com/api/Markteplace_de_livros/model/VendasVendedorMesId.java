@@ -7,5 +7,4 @@ public class VendasVendedorMesId implements Serializable {
     private Integer vendedorId;
     private Integer ano;
     private Integer mes;
-
 }
